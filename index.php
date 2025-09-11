@@ -33,6 +33,7 @@ switch($uc){
 		$menuActif = 'Jeux';	// pour garder le menu correspondant ouvert
 		require 'vue/v_menu.php';
 		require 'controlleur/c_gererGenres.php';
+		require 'controlleur/v_Plateforme.php'; // à compléter
 		// à compléter
 		break;
     }  
