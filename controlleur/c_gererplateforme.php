@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 	if (!isset($_POST['cmdAction'])) {
 		 $action = 'afficherPlateformes';
@@ -34,7 +34,7 @@
 			break;
 		}
 
-		case 'supprimerGenre': {
+		case 'supprimerPlateforme': {
 			$idPlateforme = $_POST['txtIdPlateforme'];
 			$db->supprimerPlateformes($idPlateforme);
 			break;
@@ -42,7 +42,7 @@
 	}
 		
 	// l' affichage des genres se fait dans tous les cas	
-	$tbGenres  = $db->getPlateformes();		
+	$tbPlateforme = $db->getPlateformes();
 	require 'vue/v_Plateformes.php';
 
 	?>

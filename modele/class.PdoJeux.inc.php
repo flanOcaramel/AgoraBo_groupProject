@@ -154,5 +154,91 @@ class PdoJeux {
 	
 
 
+	//==============================================================================
+	//
+	//	METHODES POUR LA GESTION DES PLATEFORMES
+	//
+	//==============================================================================
+	
+    /**
+     * Retourne toutes les plateformes sous forme d'un tableau d'objets 
+     * 
+     * @return array le tableau d'objets  (Plateforme)
+     */
+    public function getLesPlateformes(): array {
+  		$requete =  'SELECT idPlateforme as identifiant, libPlateforme as libelle 
+						FROM plateformes 
+						ORDER BY libPlateforme';
+		try	{	 
+			$resultat = PdoJeux::$monPdo->query($requete);
+			$tbPlateformes  = $resultat->fetchAll();	
+			return $tbPlateformes;		
+		}
+		catch (PDOException $e)	{  
+			die('<div class = "erreur">Erreur dans la requête !<p>'
+				.$e->getmessage().'</p></div>');
+		}
+    }
+
+	
+	/**
+	 * Ajoute une nouvelle plateforme avec le libellé donné en paramètre
+	 * 
+	 * @param string $libPlateforme : le libelle de la plateforme à ajouter
+	 * @return int l'identifiant de la plateforme crée
+	 */
+    public function ajouterPlateforme(string $libPlateforme): int {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateformes "
+                    . "(idPlateforme, libPlateforme) "
+                    . "VALUES (0, :unLibPlateforme) ");
+            $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
+            $requete_prepare->execute();
+			// récupérer l'identifiant crée
+			return PdoJeux::$monPdo->lastInsertId(); 
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+				.$e->getmessage().'</p></div>');
+        }
+    }
+	
+	
+	 /**
+     * Modifie le libellé de la plateforme donnée en paramètre
+     * 
+     * @param int $idPlateforme : l'identifiant de la plateforme à modifier  
+     * @param string $libPlateforme : le libellé modifié
+     */
+    public function modifierPlateforme(int $idPlateforme, string $libPlateforme): void {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE plateformes "
+                    . "SET libPlateforme = :unLibPlateforme "
+                    . "WHERE plateformes.idPlateforme = :unIdPlateforme");
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+				.$e->getmessage().'</p></div>');
+        }
+    }
+	
+	
+	/**
+     * Supprime la plateforme donnée en paramètre
+     * 
+     * @param int $idPlateforme :l'identifiant de la plateforme à supprimer 
+     */
+    public function supprimerPlateforme(int $idPlateforme): void {
+       try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM plateformes "
+                    . "WHERE plateformes.idPlateforme = :unIdPlateforme");
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+				.$e->getmessage().'</p></div>');
+        }
+    }
 }
 ?>
