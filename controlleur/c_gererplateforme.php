@@ -22,27 +22,27 @@
 		  break;
 		}
 
-		case 'demanderModifierGenre': {
+		case 'demanderModifierPlateforme': {
 				$idPlateformeModif = $_POST['txtIdPlateforme'];
 			break;
 		}
 			
 		case 'validerModifierPlateforme': {
-			$db->modifierPlateforme($_POST['txtIdPlateforme'], $_POST['txtLibPlateforme']); 
-			$idGenreNotif = $_POST['txtIdPlateforme']; // $idGenreNotif est l'idGenre du genre modifié
+			$db->modifierPlateformes($_POST['txtIdPlateforme'], $_POST['txtLibPlateforme']); 
+			$idPlateformeNotif = $_POST['txtIdPlateforme']; // $idGenreNotif est l'idGenre du genre modifié
 			$notification = 'Modifié';  // sert à afficher la modification réalisée dans la vue
 			break;
 		}
 
 		case 'supprimerGenre': {
-			$idGenre = $_POST['txtIdGenre'];
-			$db->supprimerPlateforme($idPlateforme);
+			$idPlateforme = $_POST['txtIdPlateforme'];
+			$db->supprimerPlateformes($idPlateforme);
 			break;
 		}
 	}
 		
 	// l' affichage des genres se fait dans tous les cas	
-	$tbGenres  = $db->getLesGenres();		
+	$tbGenres  = $db->getPlateformes();		
 	require 'vue/v_Plateformes.php';
 
 	?>

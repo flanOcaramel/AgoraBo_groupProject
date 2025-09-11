@@ -8,7 +8,7 @@
 			<table class="table table-striped table-advance table-hover">
 			<thead>
 			  <tr class="tableau-entete">
-				<th><i class="fa fa-bullhorn"></i> </th>
+				<th><i class="fa fa-bullhorn"></i> Identifiant </th>
 				<th><i class="fa fa-bookmark"></i> Libellé</th>
 				<th></th>
 			  </tr>
@@ -29,34 +29,34 @@
 			</tr>
 				
 			<?php
-			foreach ($tbGenre as $genre) { 
+			foreach ($tbPlateforme as $plateforme) { 
 			?>
 			  <tr>
 			  
 				<!-- formulaire pour modifier et supprimer-->
-				<form action="index.php?uc=gererGenres" method="post">
-				<td><?php echo $genre->identifiant; ?><input type="hidden"  name="txtIdGenre" value="<?php echo $genre->identifiant; ?>" /></td>
+				<form action="index.php?uc=gererPlateforme" method="post">
+				<td><?php echo $plateforme->identifiant; ?><input type="hidden"  name="txtIPlateforme" value="<?php echo $plateforme->identifiant; ?>" /></td>
 				<td><?php 
-					if ($genre->identifiant != $idGenreModif) {
-						echo $genre->libelle;
+					if ($plateforme->identifiant != $idPlateformeModif) {
+						echo $plateforme->libelle;
 						?>
 						</td><td>
-							<?php if ($notification != 'rien' && $genre->identifiant == $idGenreNotif) {  
+							<?php if ($notification != 'rien' && $plateforme->identifiant == $idPlateformeNotif) {  
 								echo '<button class="btn btn-success btn-xs"><i class="fa fa-check"></i>' . $notification . '</button>'; 
 							
 							} ?>
-							<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierGenre" title="Modifier"><i class="fa fa-pencil"></i></button>
-							<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerGenre" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce genre?');"><i class="fa fa-trash-o "></i></button>
+							<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierPlateforme" title="Modifier"><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerPlateforme" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce plateforme?');"><i class="fa fa-trash-o "></i></button>
 						</td>
 					<?php
 					}
 					else {
-						?><input type="text" id="txtLibGenre" name="txtLibGenre" size="24" required minlength="4"  maxlength="24"   value="<?php echo $genre->libelle; ?>" />     
+						?><input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required minlength="4"  maxlength="24"   value="<?php echo $plateforme->libelle; ?>" />     
 						</td>
 						<td>		 
-							<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierGenre" title="Enregistrer"><i class="fa fa-save"></i></button>
+							<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierPlateforme" title="Enregistrer"><i class="fa fa-save"></i></button>
 							<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>				
-							<button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierGenre" title="Annuler"><i class="fa fa-undo"></i></button>
+							<button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierPlateforme" title="Annuler"><i class="fa fa-undo"></i></button>
 						</td>				
 					<?php
 					}				
