@@ -1,6 +1,6 @@
 <?php
 /**
- * Page d'accueil de l'application AgoraBo
+ *Page d'accueil de l'application AgoraBo
 
  * Point d'entrée unique de l'application
  * @author MD
@@ -11,7 +11,7 @@ require 'vue/v_header.html';	// entête des pages HTML
 // inclure les bibliothèques de fonctions
 require_once 'app/_config.inc.php';
 require_once 'modele/class.PdoJeux.inc.php';
-	
+
 // Connexion au serveur et à la base (A)
 $db = PdoJeux::getPdoJeux();
 
@@ -32,15 +32,19 @@ switch($uc){
     case 'gererGenres' : {
 		$menuActif = 'Jeux';	// pour garder le menu correspondant ouvert
 		require 'vue/v_menu.php';
-		// à compléter
-		break;
-    }  
+		require 'controlleur/c_gererGenres.php'; break;
+    }
+	case 'gererPegis' : {
+		$menuActif = 'Pegi';	// pour garder le menu correspondant ouvert
+		require 'vue/v_menu.php';
+		require 'controlleur/c_gererPegis.php'; break;
+	}
 }
 
 // Fermeture de la connexion (C)
-$db = null;	
+$db = null;
 
 // pied de page
-require("vue/v_footer.html") ;	
+require("vue/v_footer.html") ;
 ?>
 

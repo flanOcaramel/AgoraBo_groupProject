@@ -76,6 +76,74 @@ class PdoJeux {
      * 
      * @return array le tableau d'objets  (Genre)
      */
+    public function getLesPegis(): array {
+  		$requete =  'SELECT idPegi as identifiant, ageLimite as age, descPegi as description
+                        FROM pegi
+                        ORDER BY ageLimite';
+        try	{
+            $resultat = PdoJeux::$monPdo->query($requete);
+            $tbPegis  = $resultat->fetchAll();
+            return $tbPegis;
+        }
+        catch (PDOException $e)	{
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Ajoute un nouveau pegi avec les informations données en paramètre
+     * 
+     * @param string $age : l'age du pegi à ajouter
+     * @param string $description : la description du pegi à ajouter
+     * @return int l'identifiant du pegi crée
+     */
+
+    public function ajouterPegi(string $age, string $description): int {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO pegi (idPegi, ageLimite, descPegi) VALUES (0, :unAge, :uneDescription)");
+            $requete_prepare->bindParam(':unAge', $age, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':uneDescription', $description, PDO::PARAM_STR);
+            $requete_prepare->execute();
+            return PdoJeux::$monPdo->lastInsertId(); 
+        } catch (Exception $e) { // Ajout du catch et de l'accolade fermante
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Supprime le genre donné en paramètre
+     * 
+     * @param int $idGenre :l'identifiant du genre à supprimer 
+     */
+    public function supprimerPegis(int $idPegi): void {
+       try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM pegi "
+                    . "WHERE pegi.idPegi = :unIdPegi");
+            $requete_prepare->bindParam(':unIdPegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    public function modifierPegi(int $idPegi, string $age, string $description): void { // Correction de "funtion" en "function"
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE pegi "
+                    . "SET ageLimite = :unAge, descPegi = :uneDescription "
+                    . "WHERE pegi.idPegi = :unIdPegi");
+            $requete_prepare->bindParam(':unIdPegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unAge', $age, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':uneDescription', $description, PDO::PARAM_STR);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
     public function getLesGenres(): array {
   		$requete =  'SELECT idGenre as identifiant, libGenre as libelle 
 						FROM genre 
@@ -83,7 +151,7 @@ class PdoJeux {
 		try	{	 
 			$resultat = PdoJeux::$monPdo->query($requete);
 			$tbGenres  = $resultat->fetchAll();	
-			return $tbGenres;		
+			return $tbGenres;
 		}
 		catch (PDOException $e)	{  
 			die('<div class = "erreur">Erreur dans la requête !<p>'
@@ -120,7 +188,7 @@ class PdoJeux {
      * @param int $idGenre : l'identifiant du genre à modifier  
      * @param string $libGenre : le libellé modifié
      */
-    public function modifierGenre(int $idGenre, string $libGenre): void {
+    public function modifierGenre(int $idGenre, string $libGenre): void { // C'est la bonne version de la fonction
         try {
             $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE genre "
                     . "SET libGenre = :unLibGenre "
