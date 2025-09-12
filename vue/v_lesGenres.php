@@ -7,11 +7,11 @@
 		<div class="panel-body">
 			<table class="table table-striped table-advance table-hover">
 			<thead>
-			  <tr class="tableau-entete">
+			<tr class="tableau-entete">
 				<th><i class="fa fa-bullhorn"></i> Identifiant</th>
 				<th><i class="fa fa-bookmark"></i> Libellé</th>
 				<th></th>
-			  </tr>
+			</tr>
 			</thead>
 			<tbody>
 			<!-- formulaire pour ajouter un nouveau genre-->
@@ -31,8 +31,8 @@
 			<?php
 			foreach ($tbGenres as $genre) { 
 			?>
-			  <tr>
-			  
+			<tr>
+			
 				<!-- formulaire pour modifier et supprimer les genres-->
 				<form action="index.php?uc=gererGenres" method="post">
 				<td><?php echo $genre->identifiant; ?><input type="hidden"  name="txtIdGenre" value="<?php echo $genre->identifiant; ?>" /></td>
@@ -63,13 +63,13 @@
 					?>
 				</form>
 				
-			  </tr>  
+			</tr>  
 			<?php
 			}
 			?>
 			</tbody>
-		  </table>
-			  	  
+		</table>
+		
 		</div><!-- fin div panel-body-->
     </section><!-- fin section genres-->
 </div><!--fin div col-sm-6-->

@@ -4,7 +4,7 @@
 	//		sinon l'action est celle indiquée par le bouton
 
 	if (!isset($_POST['cmdAction'])) {
-		 $action = 'afficherGenres';
+		$action = 'afficherGenres';
 	}
 	else {
 		// par défaut
@@ -23,7 +23,7 @@
 				// $idGenreNotif est l'idGenre du genre ajouté
 				$notification = 'Ajouté';	// sert à afficher l'ajout réalisé dans la vue
 			}
-		  break;
+			break;
 		}
 
 		case 'demanderModifierGenre': {
@@ -40,7 +40,8 @@
 
 		case 'supprimerGenre': {
 			$idGenre = $_POST['txtIdGenre'];
-			$db-> //  à compléter, voir quelle méthode appeler dans le modèle
+			$db-> supprimerGenre($idGenre);
+			$notification = 'Supprimé';  // sert à afficher la suppression réalisée dans la vue
 			break;
 		}
 	}

@@ -141,7 +141,7 @@ class PdoJeux {
      * @param int $idGenre :l'identifiant du genre à supprimer 
      */
     public function supprimerGenre(int $idGenre): void {
-       try {
+        try {
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM genre "
                     . "WHERE genre.idGenre = :unIdGenre");
             $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
@@ -151,8 +151,71 @@ class PdoJeux {
 				.$e->getmessage().'</p></div>');
         }
     }
-	
+	public function getLesJeux(): array {
+  	    $requete =  'SELECT refJeu as identifiant, nom, idPlateforme, idPegi, idGenre, idMarque
+                        FROM jeu_video
+                        ORDER BY nom';
+        try	{
+            $resultat = PdoJeux::$monPdo->query($requete);
+            $tbJeux  = $resultat->fetchAll();
+            return $tbJeux;
+        }
+        catch (PDOException $e)	{
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
 
+    public function ajouterJeu(string $nom, int $idPlateforme, int $idPegi, int $idGenre, int $idMarque): int {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO jeu_video "
+                    . "(refJeu, nom, idPlateforme, idPegi, idGenre, idMarque) "
+                    . "VALUES (0, :unNom, :unIdPlateforme, :unIdPegi, :unIdGenre, :unIdMarque) ");
+            $requete_prepare->bindParam(':unNom', $nom, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdPegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdMarque', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        }
+        catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+        // récupérer l'identifiant crée
+        return PdoJeux::$monPdo->lastInsertId();
+    }
 
+    public function modifierJeu(int $refJeu, string $nom, int $idPlateforme, int $idPegi, int $idGenre, int $idMarque): void {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE jeu_video "
+                    . "SET nom = :unNom, idPlateforme = :unIdPlateforme, idPegi = :unIdPegi, idGenre = :unIdGenre, idMarque = :unIdMarque "
+                    . "WHERE jeu_video.refJeu = :unRefJeu");
+            $requete_prepare->bindParam(':unRefJeu', $refJeu, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unNom', $nom, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdPegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unIdMarque', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    public function supprimerJeu(int $refJeu): void {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM jeu_video "
+                    . "WHERE jeu_video.refJeu = :unRefJeu");
+            $requete_prepare->bindParam(':unRefJeu', $refJeu, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
 }
+
+
 ?>
