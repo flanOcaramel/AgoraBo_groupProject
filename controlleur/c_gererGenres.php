@@ -40,7 +40,7 @@
 
 		case 'supprimerGenre': {
 			$idGenre = $_POST['txtIdGenre'];
-			$db->supprimerGenre($idGenre);
+			$db-> //  à compléter, voir quelle méthode appeler dans le modèle
 			break;
 		}
 	}
