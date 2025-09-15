@@ -165,10 +165,10 @@ class PdoJeux {
      * 
      * @return array le tableau d'objets  (Plateforme)
      */
-    public function getLesPlateformes(): array {
+    public function getPlateformes(): array {  // Cambio: getLesPlateformes() -> getPlateformes()
   		$requete =  'SELECT idPlateforme as identifiant, libPlateforme as libelle 
-						FROM plateformes 
-						ORDER BY libPlateforme';
+						FROM plateforme 
+						ORDER BY libPlateforme';  // Cambio: plateformes -> plateforme
 		try	{	 
 			$resultat = PdoJeux::$monPdo->query($requete);
 			$tbPlateformes  = $resultat->fetchAll();	
@@ -187,9 +187,9 @@ class PdoJeux {
 	 * @param string $libPlateforme : le libelle de la plateforme à ajouter
 	 * @return int l'identifiant de la plateforme crée
 	 */
-    public function ajouterPlateforme(string $libPlateforme): int {
+    public function ajouterNouveauPlateforme(string $libPlateforme): int {  // Cambio: ajouterPlateforme() -> ajouterNouveauPlateforme()
         try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateformes "
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateforme "  // Cambio: plateformes -> plateforme
                     . "(idPlateforme, libPlateforme) "
                     . "VALUES (0, :unLibPlateforme) ");
             $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
@@ -209,11 +209,11 @@ class PdoJeux {
      * @param int $idPlateforme : l'identifiant de la plateforme à modifier  
      * @param string $libPlateforme : le libellé modifié
      */
-    public function modifierPlateforme(int $idPlateforme, string $libPlateforme): void {
+    public function modifierPlateformes(int $idPlateforme, string $libPlateforme): void {  // Cambio: modifierPlateforme() -> modifierPlateformes()
         try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE plateformes "
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE plateforme "  // Cambio: plateformes -> plateforme
                     . "SET libPlateforme = :unLibPlateforme "
-                    . "WHERE plateformes.idPlateforme = :unIdPlateforme");
+                    . "WHERE plateforme.idPlateforme = :unIdPlateforme");  // Cambio: plateformes -> plateforme
             $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
             $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
             $requete_prepare->execute();
@@ -229,10 +229,10 @@ class PdoJeux {
      * 
      * @param int $idPlateforme :l'identifiant de la plateforme à supprimer 
      */
-    public function supprimerPlateforme(int $idPlateforme): void {
+    public function supprimerPlateformes(int $idPlateforme): void {  // Cambio: supprimerPlateforme() -> supprimerPlateformes()
        try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM plateformes "
-                    . "WHERE plateformes.idPlateforme = :unIdPlateforme");
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM plateforme "  // Cambio: plateformes -> plateforme
+                    . "WHERE plateforme.idPlateforme = :unIdPlateforme");  // Cambio: plateformes -> plateforme
             $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
             $requete_prepare->execute();
         } catch (Exception $e) {
