@@ -1,4 +1,3 @@
-<!-- page start-->
 <div class="col-sm-6">
 	<section class="panel">
 		<div class="chat-room-head">
@@ -14,15 +13,15 @@
 			  </tr>
 			</thead>
 			<tbody>
-			<!-- formulaire pour ajouter une nouvele Plateformes-->
+			<!-- formulaire pour ajouter une nouvelle Plateforme-->
 			<tr>
-			<form action="index.php?uc=gererPlateforme" method="post">
+			<form action="index.php?uc=gererPlateformes" method="post">
 				<td>Nouveau</td>
 				<td>
 					<input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required minlength="4"  maxlength="24"  placeholder="Libellé" title="De 4 à 24 caractères"  />
 				</td>
 				<td> 
-					<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauPlateforme" title="Enregistrer nouveau plateforme"><i class="fa fa-save"></i></button>
+					<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouveauPlateforme" title="Enregistrer nouvelle plateforme"><i class="fa fa-save"></i></button>
 					<button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>	
 				</td>
 			</form>
@@ -34,19 +33,19 @@
 			  <tr>
 			  
 				<!-- formulaire pour modifier et supprimer-->
-				<form action="index.php?uc=gererPlateforme" method="post">
-				<td><?php echo $plateforme->identifiant; ?><input type="hidden"  name="txtIPlateforme" value="<?php echo $plateforme->identifiant; ?>" /></td>
+				<form action="index.php?uc=gererPlateformes" method="post">
+				<td><?php echo $plateforme->identifiant; ?><input type="hidden"  name="txtIdPlateforme" value="<?php echo $plateforme->identifiant; ?>" /></td>
 				<td><?php 
 					if ($plateforme->identifiant != $idPlateformeModif) {
 						echo $plateforme->libelle;
 						?>
 						</td><td>
-							<?php if ($notification != 'rien' && $plateforme->identifiant == $idPlateformeNotif) {  
+							<?php if ($notification != 'rien' && isset($idPlateformeNotif) && $plateforme->identifiant == $idPlateformeNotif) {  
 								echo '<button class="btn btn-success btn-xs"><i class="fa fa-check"></i>' . $notification . '</button>'; 
 							
 							} ?>
 							<button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierPlateforme" title="Modifier"><i class="fa fa-pencil"></i></button>
-							<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerPlateforme" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce plateforme?');"><i class="fa fa-trash-o "></i></button>
+							<button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerPlateforme" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer cette plateforme?');"><i class="fa fa-trash-o "></i></button>
 						</td>
 					<?php
 					}
