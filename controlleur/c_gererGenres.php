@@ -4,9 +4,8 @@
 	//		sinon l'action est celle indiquée par le bouton
 
 	if (!isset($_POST['cmdAction'])) {
-		 $action = 'afficherGenres';
-	}
-	else {
+		$action = 'afficherGenres';
+	} else {
 		// par défaut
 		$action = $_POST['cmdAction'];
 	}
@@ -15,38 +14,39 @@
 	$notification = 'rien';	// pour notifier la mise à jour dans la vue
 
 	// selon l'action demandée on réalise l'action 
-	switch($action) {
+	switch ($action) {
 
-		case 'ajouterNouveauGenre': {		
-			if (!empty($_POST['txtLibGenre'])) {
-				$idGenreNotif = $db->ajouterGenre($_POST['txtLibGenre']);
-				// $idGenreNotif est l'idGenre du genre ajouté
-				$notification = 'Ajouté';	// sert à afficher l'ajout réalisé dans la vue
+		case 'ajouterNouveauGenre': {
+				if (!empty($_POST['txtLibGenre'])) {
+					$idGenreNotif = $db->ajouterGenre($_POST['txtLibGenre']);
+					// $idGenreNotif est l'idGenre du genre ajouté
+					$notification = 'Ajouté';	// sert à afficher l'ajout réalisé dans la vue
+				}
+				break;
 			}
-		  break;
-		}
 
 		case 'demanderModifierGenre': {
 				$idGenreModif = $_POST['txtIdGenre']; // sert à créer un formulaire de modification pour ce genre
-			break;
-		}
-			
+				break;
+			}
+
 		case 'validerModifierGenre': {
-			$db->modifierGenre($_POST['txtIdGenre'], $_POST['txtLibGenre']); 
-			$idGenreNotif = $_POST['txtIdGenre']; // $idGenreNotif est l'idGenre du genre modifié
-			$notification = 'Modifié';  // sert à afficher la modification réalisée dans la vue
-			break;
-		}
+				$db->modifierGenre($_POST['txtIdGenre'], $_POST['txtLibGenre']);
+				$idGenreNotif = $_POST['txtIdGenre']; // $idGenreNotif est l'idGenre du genre modifié
+				$notification = 'Modifié';  // sert à afficher la modification réalisée dans la vue
+				break;
+			}
 
 		case 'supprimerGenre': {
-			$idGenre = $_POST['txtIdGenre'];
-			$db-> //  à compléter, voir quelle méthode appeler dans le modèle
-			break;
-		}
+				$idGenre = $_POST['txtIdGenre'];
+				$db->supprimerGenre($idGenre); // Appel de la méthode pour supprimer le genre
+				$notification = 'Supprimé'; // sert à afficher la suppression réalisée dans la vue
+				break;
+			}
 	}
-		
+
 	// l' affichage des genres se fait dans tous les cas	
-	$tbGenres  = $db->getLesGenres();		
+	$tbGenres  = $db->getLesGenres();
 	require 'vue/v_lesGenres.php';
 
 	?>
