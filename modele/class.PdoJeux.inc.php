@@ -65,17 +65,317 @@ class PdoJeux {
         return PdoJeux::$monPdoJeux;
     }
 
-	//==============================================================================
-	//
-	//	METHODES POUR LA GESTION DES GENRES
-	//
-	//==============================================================================
+    //==============================================================================
+    //
+    //	METHODES POUR LA GESTION DES PLATEFORMES
+    //
+    //==============================================================================
+
+    /**
+     * Retourne toutes les plateformes sous forme d'un tableau d'objets 
+     * 
+     * @return array le tableau d'objets  (Plateforme)
+     */
+
+    public function getLesPlateformes(): array {
+  		$requete =  'SELECT idPlateforme as identifiant, libPlateforme as libelle 
+                        FROM plateforme 
+                        ORDER BY libPlateforme';
+        try	{
+            $resultat = PdoJeux::$monPdo->query($requete);
+            $tbPlateformes  = $resultat->fetchAll();    
+            return $tbPlateformes;
+        }
+        catch (PDOException $e)	{  
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+
+    }
+
+    /**
+     * Ajoute une nouvelle plateforme avec le libellé donné en paramètre
+     * 
+     * @param string $libPlateforme : le libelle de la plateforme à ajouter
+     * @return int l'identifiant de la plateforme crée
+     */
+
+    public function ajouterPlateforme(string $libPlateforme): int {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO plateforme "
+                    . "(idPlateforme, libPlateforme) "
+                    . "VALUES (0, :unLibPlateforme) ");
+            $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
+            $requete_prepare->execute();
+            // récupérer l'identifiant crée
+            return PdoJeux::$monPdo->lastInsertId();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Modifie le libellé de la plateforme donnée en paramètre
+     * 
+     * @param int $idPlateforme : l'identifiant de la plateforme à modifier  
+     * @param string $libPlateforme : le libellé modifié
+     */
+
+    public function modifierPlateforme(int $idPlateforme, string $libPlateforme): void { // Correction de "funtion" en "function"
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE plateforme "
+                    . "SET libPlateforme = :unLibPlateforme "
+                    . "WHERE plateforme.idPlateforme = :unIdPlateforme");
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unLibPlateforme', $libPlateforme, PDO::PARAM_STR);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Supprime la plateforme donnée en paramètre
+     * 
+     * @param int $idPlateforme :l'identifiant de la plateforme à supprimer 
+     */
+
+    public function supprimerPlateforme(int $idPlateforme): void {
+       try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM plateforme "
+                    . "WHERE plateforme.idPlateforme = :unIdPlateforme");
+            $requete_prepare->bindParam(':unIdPlateforme', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    //==============================================================================
+    //
+    //	METHODES POUR LA GESTION DES JEUX
+    //
+    //==============================================================================
+
+    /**
+     * Retourne tous les jeux avec les détails des tables associées.
+     * 
+     * @return array le tableau d'objets (Jeu)
+     */
+    public function getLesJeux(): array {
+        $requete = 'SELECT 
+                        jeu_video.refJeu,
+                        jeu_video.nom,
+                        jeu_video.prix,
+                        jeu_video.dateParution,
+                        genre.libGenre,
+                        marque.nomMarque,
+                        plateforme.libPlateforme,
+                        pegi.ageLimite
+                    FROM jeu_video
+                    INNER JOIN genre ON jeu_video.idGenre = genre.idGenre
+                    INNER JOIN marque ON jeu_video.idMarque = marque.idMarque
+                    INNER JOIN plateforme ON jeu_video.idPlateforme = plateforme.idPlateforme
+                    INNER JOIN pegi ON jeu_video.idPegi = pegi.idPegi
+                    ORDER BY jeu_video.nom';
+        try {
+            $resultat = PdoJeux::$monPdo->query($requete);
+            $tbJeux = $resultat->fetchAll();
+            return $tbJeux;
+        } catch (PDOException $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                . $e->getMessage() . '</p></div>');
+        }
+    }
+
+    /**
+     * Ajoute un nouveau jeu dans la base de données.
+     * 
+     * @param string $refJeu
+     * @param string $nomJeu
+     * @param float $prix
+     * @param string $dateParution
+     * @param int $idGenre
+     * @param int $idMarque
+     * @param int $idPlateforme
+     * @param int $idPegi
+     * @return string la référence du jeu créé
+     */
+    public function ajouterJeu(string $refJeu, string $nomJeu, float $prix, string $dateParution, int $idGenre, int $idMarque, int $idPlateforme, int $idPegi): string {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare(
+                "INSERT INTO jeu_video (refJeu, nom, prix, dateParution, idGenre, idMarque, idPlateforme, idPegi) 
+                 VALUES (:ref, :nom, :prix, :datep, :idg, :idm, :idp, :idpegi)"
+            );
+            $requete_prepare->bindParam(':ref', $refJeu, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':nom', $nomJeu, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':prix', $prix, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':datep', $dateParution, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':idg', $idGenre, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idm', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idp', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idpegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->execute();
+            return $refJeu;
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                . $e->getMessage() . '</p></div>');
+        }
+    }
+
+    /**
+     * Modifie les informations d'un jeu.
+     *
+     * @param string $refJeu
+     * @param string $nomJeu
+     * @param float $prix
+     * @param string $dateParution
+     * @param int $idGenre
+     * @param int $idMarque
+     * @param int $idPlateforme
+     * @param int $idPegi
+     */
+    public function modifierJeu(string $refJeu, string $nomJeu, float $prix, string $dateParution, int $idGenre, int $idMarque, int $idPlateforme, int $idPegi): void {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare(
+                "UPDATE jeu_video 
+                 SET nom = :nom, prix = :prix, dateParution = :datep, idGenre = :idg, idMarque = :idm, idPlateforme = :idp, idPegi = :idpegi
+                 WHERE refJeu = :ref"
+            );
+            $requete_prepare->bindParam(':ref', $refJeu, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':nom', $nomJeu, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':prix', $prix, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':datep', $dateParution, PDO::PARAM_STR);
+            $requete_prepare->bindParam(':idg', $idGenre, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idm', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idp', $idPlateforme, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':idpegi', $idPegi, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                . $e->getMessage() . '</p></div>');
+        }
+    }
+
+    /**
+     * Supprime un jeu de la base de données.
+     * 
+     * @param string $refJeu : la référence du jeu à supprimer
+     */
+    public function supprimerJeu(string $refJeu): void {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM jeu_video WHERE refJeu = :ref");
+            $requete_prepare->bindParam(':ref', $refJeu, PDO::PARAM_STR);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                . $e->getMessage() . '</p></div>');
+        }
+    }
+
+
+    //==============================================================================
+    //
+    //	METHODES POUR LA GESTION DES Marques
+    //
+    //==============================================================================
 	
     /**
      * Retourne tous les genres sous forme d'un tableau d'objets 
      * 
      * @return array le tableau d'objets  (Genre)
      */
+
+    public function getLesMarques(): array {
+  		$requete =  'SELECT idMarque as identifiant, nomMarque as libelle 
+                        FROM marque 
+                        ORDER BY nomMarque';
+        try	{
+            $resultat = PdoJeux::$monPdo->query($requete);
+            $tbMarques  = $resultat->fetchAll();    
+            return $tbMarques;
+        }
+        catch (PDOException $e)	{  
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+
+    }
+    /**
+     * Ajoute une nouvelle marque avec le nom donné en paramètre
+     * 
+     * @param string $nomMarque : le nom de la marque à ajouter
+     * @return int l'identifiant de la marque crée
+     */
+
+    public function ajouterMarque(string $nomMarque): int {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO marque "
+                    . "(idMarque, nomMarque) "
+                    . "VALUES (0, :unNomMarque) ");
+            $requete_prepare->bindParam(':unNomMarque', $nomMarque, PDO::PARAM_STR);
+            $requete_prepare->execute();
+            // récupérer l'identifiant crée
+            return PdoJeux::$monPdo->lastInsertId(); 
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Modifie le nom de la marque donnée en paramètre
+     * 
+     * @param int $idMarque : l'identifiant de la marque à modifier  
+     * @param string $nomMarque : le nom modifié
+     */
+
+    public function modifierMarque(int $idMarque, string $nomMarque): void { // Correction de "funtion" en "function"
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE marque "
+                    . "SET nomMarque = :unNomMarque "
+                    . "WHERE marque.idMarque = :unIdMarque");
+            $requete_prepare->bindParam(':unIdMarque', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->bindParam(':unNomMarque', $nomMarque, PDO::PARAM_STR);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    /**
+     * Supprime la marque donnée en paramètre
+     * 
+     * @param int $idMarque :l'identifiant de la marque à supprimer 
+     */
+
+    public function supprimerMarque(int $idMarque): void {
+       try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM marque "
+                    . "WHERE marque.idMarque = :unIdMarque");
+            $requete_prepare->bindParam(':unIdMarque', $idMarque, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                .$e->getmessage().'</p></div>');
+        }
+    }
+
+    //==============================================================================
+    //
+    //	METHODES POUR LA GESTION DES PEGIS
+    //
+    //==============================================================================
+    /**
+     * Retourne tous les pegi sous forme d'un tableau d'objets 
+     * 
+     * @return array le tableau d'objets  (Pegi)
+     */
+
     public function getLesPegis(): array {
   		$requete =  'SELECT idPegi as identifiant, ageLimite as age, descPegi as description
                         FROM pegi

@@ -1,7 +1,7 @@
 ﻿<?php
 // si le paramètre action n'est pas positionné alors
-//		si aucun bouton "action" n'a été envoyé alors par défaut on affiche les genres
-//		sinon l'action est celle indiquée par le bouton
+//si aucun bouton "action" n'a été envoyé alors par défaut on affiche les genres
+//sinon l'action est celle indiquée par le bouton
 
 if (!isset($_POST['cmdAction'])) {
      $action = 'afficherGenres';
@@ -31,32 +31,13 @@ switch($action) {
         break;
     }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-		case 'supprimerGenre': {
-			$idGenre = $_POST['txtIdGenre'];
-			$db-> //  à compléter, voir quelle méthode appeler dans le modèle
-			break;
-		}
-	}
-		
-	// l' affichage des genres se fait dans tous les cas	
-	$tbGenres  = $db->getLesGenres();		
-	require 'vue/v_lesGenres.php';
-=======
-=======
->>>>>>> Stashed changes
     case 'validerModifierGenre': {
         $db->modifierGenre($_POST['txtIdGenre'], $_POST['txtLibGenre']);
         $idGenreNotif = $_POST['txtIdGenre']; // $idGenreNotif est l'idGenre du genre modifié
         $notification = 'Modifié';  // sert à afficher la modification réalisée dans la vue
         break;
     }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-
+    
     case 'supprimerGenre': {
         $idGenre = $_POST['txtIdGenre'];
         $db->supprimerGenre($idGenre);

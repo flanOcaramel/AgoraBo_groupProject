@@ -15,10 +15,10 @@
               <span>Jeux vidéos</span>
               </a>
             <ul class="sub">
-              <li><a href="index.php">Jeux</a></li>
+              <li><a href="index.php?uc=gererJeux">Jeux</a></li>
               <li><a href="index.php?uc=gererGenres">Genres</a></li>
-              <li><a href="index.php">Plateformes</a></li>
-              <li><a href="index.php">Marques</a></li>
+              <li><a href="index.php?uc=gererPlateformes">Plateformes</a></li>
+              <li><a href="index.php?uc=gererMarques">Marques</a></li>
               <li><a href="index.php?uc=gererPegis">Pegi</a></li>
               <li><a href="index.php">Tournois</a></li>
             </ul>

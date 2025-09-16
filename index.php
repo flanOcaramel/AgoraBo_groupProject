@@ -38,7 +38,22 @@ switch($uc){
 		$menuActif = 'Pegi';	// pour garder le menu correspondant ouvert
 		require 'vue/v_menu.php';
 		require 'controlleur/c_gererPegis.php'; break;
-	}
+    }
+    case 'gererMarques' : {
+        $menuActif = 'Jeux';	// pour garder le menu correspondant ouvert
+        require 'vue/v_menu.php';
+        require 'controlleur/c_gererMarque.php'; break;
+    }
+    case 'gererPlateformes' : {
+        $menuActif = 'Jeux';	// pour garder le menu correspondant ouvert
+        require 'vue/v_menu.php';
+        require 'controlleur/c_gerePlateforme.php'; break;
+    }
+    case 'gererJeux' : {
+        $menuActif = 'Jeux';	// pour garder le menu correspondant ouvert
+        require 'vue/v_menu.php';
+        require 'controlleur/c_gereJeux.php'; break;
+    }
 }
 
 // Fermeture de la connexion (C)
