@@ -1,4 +1,6 @@
 <?php
+$menuActif = 'Jeux';
+
 // si le paramètre action n'est pas positionné alors
 // si aucun bouton "action" n'a été envoyé alors par défaut on affiche les plateformes
 // sinon l'action est celle indiquée par le bouton
@@ -45,9 +47,22 @@ switch($action) {
         break;
     }
 }
-
-// l'affichage des plateformes se fait dans tous les cas
 $tbPlateformes  = $db->getLesPlateformes();
-require 'vue/v_lesPlateformes.php';
+
+require_once 'vendor/autoload.php';
+$loader = new \Twig\Loader\FilesystemLoader('vue');
+$twig = new \Twig\Environment($loader);
+
+$variables = [
+    'menuActif' => $menuActif,
+    'tbPlateformes' => $tbPlateformes,
+    'idPlateformeModif' => $idPlateformeModif,
+    'notification' => $notification,
+];
+if (isset($idPlateformeNotif)) {
+    $variables['idPlateformeNotif'] = $idPlateformeNotif;
+}
+
+echo $twig->render('v_lesPlateformes.html.twig', $variables);
 
 ?>

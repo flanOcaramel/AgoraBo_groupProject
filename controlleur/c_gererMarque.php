@@ -1,4 +1,6 @@
 <?php
+$menuActif = 'Jeux';
+
 // si le paramètre action n'est pas positionné alors
 // si aucun bouton "action" n'a été envoyé alors par défaut on affiche les marques
 // sinon l'action est celle indiquée par le bouton
@@ -48,6 +50,21 @@ switch($action) {
 
 // l'affichage des marques se fait dans tous les cas
 $tbMarques  = $db->getLesMarques();
-require 'vue/v_lesMarques.php';
+
+require_once 'vendor/autoload.php';
+$loader = new \Twig\Loader\FilesystemLoader('vue');
+$twig = new \Twig\Environment($loader);
+
+$variables = [
+    'menuActif' => $menuActif,
+    'tbMarques' => $tbMarques,
+    'idMarqueModif' => $idMarqueModif,
+    'notification' => $notification,
+];
+if (isset($idMarqueNotif)) {
+    $variables['idMarqueNotif'] = $idMarqueNotif;
+}
+
+echo $twig->render('v_lesMarques.html.twig', $variables);
 
 ?>
