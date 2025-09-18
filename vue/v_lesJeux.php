@@ -11,10 +11,10 @@
                         <th><i class="fa fa-bookmark"></i> Nom</th>
                         <th><i class="fa fa-eur"></i> Prix</th>
                         <th><i class="fa fa-calendar"></i> Parution</th>
-                        <th>Genre</th>
-                        <th>Marque</th>
-                        <th>Plateforme</th>
-                        <th>PEGI</th>
+                        <th><i class="fa-solid fa-marker"></i>Genre</th>
+                        <th><i class="fa-solid fa-signature"></i>Marque</th>
+                        <th><i class="fa-brands fa-xbox"></i>Plateforme</th>
+                        <th><i class="fa-solid fa-1"></i>PEGI</th>
                         <th></th>
                     </tr>
                 </thead>
