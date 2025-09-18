@@ -61,3 +61,4 @@ switch ($action) {
 
 $tbMarques  = $db->getLesMarques();
 require 'vue/v_lesMarques.php';
+?>

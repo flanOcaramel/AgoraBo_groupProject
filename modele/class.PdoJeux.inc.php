@@ -93,7 +93,18 @@ class PdoJeux
                 . $e->getmessage() . '</p></div>');
         }
     }
-
+    public function supprimerGenre(int $idGenre): void
+    {
+        try {
+            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM genre "
+                . "WHERE genre.idGenre = :unIdGenre");
+            $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
+            $requete_prepare->execute();
+        } catch (Exception $e) {
+            die('<div class = "erreur">Erreur dans la requête !<p>'
+                . $e->getmessage() . '</p></div>');
+        }
+    }
     //==============================================================================
     //    METHODES POUR LA GESTION DES MARQUES
     //==============================================================================
@@ -123,19 +134,15 @@ class PdoJeux
      * @param string $libGenre : le libelle du genre à ajouter
      * @return int l'identifiant du genre crée
      */
-    public function ajouterGenre(string $libGenre): int
+    public function ajouterMarque(string $libMarque)
     {
-        try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("INSERT INTO genre "
-                . "(idGenre, libGenre) "
-                . "VALUES (0, :unLibGenre) ");
-            $requete_prepare->bindParam(':unLibGenre', $libGenre, PDO::PARAM_STR);
-            $requete_prepare->execute();
-            // récupérer l'identifiant crée
-            return PdoJeux::$monPdo->lastInsertId();
-        } catch (Exception $e) {
-            die('<div class = "erreur">Erreur dans la requête !<p>'
-                . $e->getmessage() . '</p></div>');
+        $sql = "INSERT INTO marque (nomMarque) VALUES (:libMarque)";
+        $stmt = self::$monPdo->prepare($sql);
+        $ok = $stmt->execute([':libMarque' => $libMarque]);
+        if ($ok) {
+            return self::$monPdo->lastInsertId();
+        } else {
+            return false;
         }
     }
 
@@ -146,37 +153,23 @@ class PdoJeux
      * @param int $idGenre : l'identifiant du genre à modifier  
      * @param string $libGenre : le libellé modifié
      */
-    public function modifierGenre(int $idGenre, string $libGenre): void
+    public function modifierMarque(int $idMarque, string $libMarque)
     {
-        try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("UPDATE genre "
-                . "SET libGenre = :unLibGenre "
-                . "WHERE genre.idGenre = :unIdGenre");
-            $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':unLibGenre', $libGenre, PDO::PARAM_STR);
-            $requete_prepare->execute();
-        } catch (Exception $e) {
-            die('<div class = "erreur">Erreur dans la requête !<p>'
-                . $e->getmessage() . '</p></div>');
-        }
+        $sql = "UPDATE marque SET nomMarque = :libMarque WHERE idMarque = :idMarque";
+        $stmt = self::$monPdo->prepare($sql);
+        return $stmt->execute([':libMarque' => $libMarque, ':idMarque' => $idMarque]);
     }
 
+    public function supprimerMarque(int $idMarque)
+    {
+        $sql = "DELETE FROM marque WHERE idMarque = :idMarque";
+        $stmt = self::$monPdo->prepare($sql);
+        return $stmt->execute([':idMarque' => $idMarque]);
+    }
 
     /**
      * Supprime le genre donné en paramètre
      * 
      * @param int $idGenre :l'identifiant du genre à supprimer 
      */
-    public function supprimerGenre(int $idGenre): void
-    {
-        try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM genre "
-                . "WHERE genre.idGenre = :unIdGenre");
-            $requete_prepare->bindParam(':unIdGenre', $idGenre, PDO::PARAM_INT);
-            $requete_prepare->execute();
-        } catch (Exception $e) {
-            die('<div class = "erreur">Erreur dans la requête !<p>'
-                . $e->getmessage() . '</p></div>');
-        }
-    }
 }
