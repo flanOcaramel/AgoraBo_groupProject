@@ -1,4 +1,5 @@
 <?php
+$menuActif = 'Jeux';
 if (!isset($_POST['cmdAction'])) {
     $action = 'afficherPegis';
 } else {
